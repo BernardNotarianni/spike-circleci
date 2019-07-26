@@ -1,3 +1,3 @@
 
 def my_message():
-    return "Hello Concourse!"
+    return "Hello circleci!"
