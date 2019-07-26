@@ -49,8 +49,8 @@ jobs:
           name: run tests
           command: |
             cd my-webapp
-            pip3 instal pytest
-            pip3 instal pytest-html
+            pip3 install pytest
+            pip3 install pytest-html
             python3 -m pytest --report=report.html
 
       - store_artifacts:
