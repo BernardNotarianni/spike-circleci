@@ -54,10 +54,10 @@ jobs:
             python3 -m pytest --cov --cov-report=html:reports --junitxml=test-reports/junit.xml
 
       - store_test_results:
-          path: test-reports
+          path: my-webapp/test-reports
 
       - store_artifacts:
-          path: test-reports    
+          path: my-webapp/test-reports    
 
       - store_artifacts:
           path: my-webapp/reports
