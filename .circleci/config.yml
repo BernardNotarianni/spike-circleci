@@ -51,7 +51,7 @@ jobs:
             cd my-webapp
             pip3 install pytest
             pip3 install pytest-html
-            python3 -m pytest --report=report.html
+            python3 -m pytest --html=report.html
 
       - store_artifacts:
           path: my-webapp/report.html
