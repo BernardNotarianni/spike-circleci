@@ -50,13 +50,9 @@ jobs:
           command: |
             cd my-webapp
             pip3 install pytest
-            pip3 install pytest-html
-            python3 -m pytest --html=report.html
+            pip3 install pytest-cov
+            python3 -m pytest --cov --cov-report=html:reports
 
       - store_artifacts:
-          path: my-webapp/report.html
-          destination: test-reports
-
-      - store_artifacts:
-          path: my-webapp/assets
+          path: my-webapp/reports
           destination: test-reports
