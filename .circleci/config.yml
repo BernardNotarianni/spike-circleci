@@ -6,6 +6,7 @@ workflows:
   build_and_push_image:
     jobs:
       - gcp-gcr/build-and-push-image:
-          context: myContext
+          context: gcloud
+          path: my-webapp
           image: my-image
-          registry-url: us.gcr.io
+          registry-url: gcr.io
