@@ -31,7 +31,7 @@ jobs:
   # https://circleci.com/docs/2.0/google-container-engine/
   # https://cloud.google.com/container-registry/docs/pushing
   build-docker:
-    context: gcloud
+    context: gclud
     machine: true
     steps:
       - checkout
@@ -39,8 +39,7 @@ jobs:
       - run:
           name: build docker image
           command: |
-            echo ${GCLOUD_TEST}
-            cat ${HOME}/gcp-key.json
+            echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcp-key.json
             gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
             cd my-webapp
             docker build --rm=false -t gcr.io/spike-circle/my-webapp:$CIRCLE_SHA1 .
