@@ -54,3 +54,11 @@ jobs:
       - store_artifacts:
           path: my-webapp/reports
           destination: test-reports
+
+workflows:
+  test_and_build:
+    jobs:
+      - test
+      - build
+
+          
