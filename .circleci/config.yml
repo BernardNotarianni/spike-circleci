@@ -40,9 +40,9 @@ jobs:
           command: |
             echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcp-key.json
             gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
+            gcloud config set project spike-concourse
             cd my-webapp
-            docker build --rm=false -t gcr.io/spike-circle/my-webapp:$CIRCLE_SHA1 .
-            gcloud --quiet config set project spike-circleci
+            docker build --rm=false -t gcr.io/spike-circleci/my-webapp:$CIRCLE_SHA1 .
             gcloud docker -- push gcr.io/spike-circleci/my-webapp:$CIRCLE_SHA1          
 
 
