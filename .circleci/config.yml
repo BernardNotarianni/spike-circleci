@@ -31,7 +31,6 @@ jobs:
   # https://circleci.com/docs/2.0/google-container-engine/
   # https://cloud.google.com/container-registry/docs/pushing
   build-docker:
-    context: gclud
     machine: true
     steps:
       - checkout
@@ -53,6 +52,7 @@ workflows:
     jobs:
       - pytest
       - build-docker:
+          context: gcloud
           requires:
             - pytest
 
