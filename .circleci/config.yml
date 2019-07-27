@@ -1,6 +1,34 @@
 version: 2
 jobs:
-  build:
+  test:
+    docker:
+      - image: python:3.6
+
+    working_directory: ~/my-webapp
+
+    steps:
+      - checkout
+
+      - run:
+          name: run tests
+          command: |
+            cd my-webapp
+            pip3 install pytest
+            pip3 install pytest-cov
+            python3 -m pytest --cov --cov-report=html:reports --junitxml=test-reports/junit.xml
+
+      - store_test_results:
+          path: my-webapp/test-reports
+
+      - store_artifacts:
+          path: my-webapp/test-reports    
+
+      - store_artifacts:
+          path: my-webapp/reports
+          destination: test-reports
+
+
+  build-docker:
     docker:
       - image: python:3.6
 
