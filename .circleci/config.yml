@@ -27,33 +27,24 @@ jobs:
           path: my-webapp/reports
           destination: test-reports
 
-
+  # https://circleci.com/docs/2.0/google-auth/
+  # https://circleci.com/docs/2.0/google-container-engine/
+  # https://cloud.google.com/container-registry/docs/pushing
   build-docker:
-    docker:
-      - image: python:3.6
-
-    working_directory: ~/my-webapp
-
+    context: gcloud
+    machine: true
     steps:
       - checkout
-
       - run:
-          name: run tests
-          command: |
-            cd my-webapp
-            pip3 install pytest
-            pip3 install pytest-cov
-            python3 -m pytest --cov --cov-report=html:reports --junitxml=test-reports/junit.xml
+          - name: build docker image
+          - command: |
+              echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcp-key.json
+              cd my-webapp
+              docker build --rm=false -t gcr.io/spike-circle/my-webapp:$CIRCLE_SHA1 .
+              gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
+              gcloud --quiet config set project spike-circleci
+              gcloud docker -- push gcr.io/spike-circleci/my-webapp:$CIRCLE_SHA1          
 
-      - store_test_results:
-          path: my-webapp/test-reports
-
-      - store_artifacts:
-          path: my-webapp/test-reports    
-
-      - store_artifacts:
-          path: my-webapp/reports
-          destination: test-reports
 
 workflows:
   version: 2
