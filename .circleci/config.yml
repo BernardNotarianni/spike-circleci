@@ -57,18 +57,18 @@ jobs:
       - checkout
 
       - run:
-          name: build docker image
+          name: deploy to kubernetes
           command: |
+            apt-get install -qq -y gettext
+
             echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcp-key.json
             gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
-            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
 
 
             TAG=${COMMIT_SHA1}
             NAMESPACE=my-webapp
-            envsubst < ${HOME}/kubernetes/k8s_template.yml > ${HOME}/patched_k8s.yml
+            envsubst < ${HOME}/project/kubernetes/k8s_template.yml > ${HOME}/patched_k8s.yml
             kubectl apply -f ${HOME}/patched_k8s.yml
             kubectl rollout status deployment/my-webapp
 
