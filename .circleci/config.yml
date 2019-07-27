@@ -39,11 +39,11 @@ jobs:
       - run:
           name: build docker image
           command: |
-            echo ${GCLOUD_TREST} > ${HOME}/gcp-key.json
+            echo ${GCLOUD_TEST}
             cat ${HOME}/gcp-key.json
+            gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
             cd my-webapp
             docker build --rm=false -t gcr.io/spike-circle/my-webapp:$CIRCLE_SHA1 .
-            gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
             gcloud --quiet config set project spike-circleci
             gcloud docker -- push gcr.io/spike-circleci/my-webapp:$CIRCLE_SHA1          
 
