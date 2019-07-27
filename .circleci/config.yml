@@ -68,7 +68,7 @@ jobs:
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
 
-            export TAG=${COMMIT_SHA1}
+            export TAG=${CIRCLE_SHA1}
             export NAMESPACE=my-webapp
             envsubst < k8s_template.yml > patched_k8s.yml
 
