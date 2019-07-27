@@ -67,10 +67,10 @@ jobs:
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
 
-
-            TAG=${COMMIT_SHA1}
-            NAMESPACE=my-webapp
+            export TAG=${COMMIT_SHA1}
+            export NAMESPACE="my-webapp"
             envsubst < ${HOME}/project/kubernetes/k8s_template.yml > ${HOME}/patched_k8s.yml
+
             kubectl apply -f ${HOME}/patched_k8s.yml
             kubectl rollout status deployment/my-webapp
 
