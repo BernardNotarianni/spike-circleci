@@ -73,7 +73,7 @@ jobs:
             envsubst < k8s_template.yml > patched_k8s.yml
 
             kubectl apply -f patched_k8s.yml
-            kubectl rollout status deployment/my-webapp
+            kubectl rollout status deployment/my-webapp -n ${NAMESPACE}
 
       - store_artifacts:
           path: kubernetes/patched_k8s.yml
