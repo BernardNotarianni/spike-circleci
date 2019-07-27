@@ -1,12 +1,69 @@
-version: 2.1
-orbs:
-  gcp-gcr: circleci/gcp-gcr@0.6.1  
+version: 2
+jobs:
+  pytest:
+    docker:
+      - image: python:3.6
+
+    working_directory: ~/my-webapp
+
+    steps:
+      - checkout
+
+      - run:
+          name: run tests
+          command: |
+            cd my-webapp
+            pip3 install pytest
+            pip3 install pytest-cov
+            python3 -m pytest --cov --cov-report=html:reports --junitxml=test-reports/junit.xml
+
+      - store_test_results:
+          path: my-webapp/test-reports
+
+      - store_artifacts:
+          path: my-webapp/test-reports    
+
+      - store_artifacts:
+          path: my-webapp/reports
+          destination: test-reports
+
+
+  build-docker:
+    docker:
+      - image: python:3.6
+
+    working_directory: ~/my-webapp
+
+    steps:
+      - checkout
+
+      - run:
+          name: run tests
+          command: |
+            cd my-webapp
+            pip3 install pytest
+            pip3 install pytest-cov
+            python3 -m pytest --cov --cov-report=html:reports --junitxml=test-reports/junit.xml
+
+      - store_test_results:
+          path: my-webapp/test-reports
+
+      - store_artifacts:
+          path: my-webapp/test-reports    
+
+      - store_artifacts:
+          path: my-webapp/reports
+          destination: test-reports
 
 workflows:
-  build_and_push_image:
+  version: 2
+  test_and_build:
     jobs:
-      - gcp-gcr/build-and-push-image:
-          context: gcloud
-          path: my-webapp
-          image: my-image
-          registry-url: gcr.io
+      - pytest
+      - build-docker:
+          requires:
+            - pytest
+
+          
+
+
