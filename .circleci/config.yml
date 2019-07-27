@@ -30,15 +30,11 @@ jobs:
           path: my-webapp/reports
           destination: test-reports
 
-  Build-Push-Docker:
-    description: Build and push image to Google Container Registry
-    machine: true
-    steps:
-      - gcp-gcr/build-and-push-image:
-          context: gcloud
-          path: my-webapp
-          image: spike-circleci/my-webapp
-          registry-url: gcr.io
+  gcp-gcr/build-and-push-image:
+    context: gcloud
+    path: my-webapp
+    image: spike-circleci/my-webapp
+    registry-url: gcr.io
 
 
 workflows:
@@ -46,7 +42,7 @@ workflows:
   test_and_build:
     jobs:
       - pytest
-      - Build-Push-Docker:
+      - gcp-gcr/build-and-push-image:
           requires:
             - pytest
 
