@@ -1,7 +1,7 @@
-orbs:
-  gcr: circleci/gcp-gcr@0.6.1
-
 version: 2.1
+orbs:
+  gcr-gcp: circleci/gcp-gcr@0.6.1  
+
 jobs:
   pytest:
     docker:
@@ -34,8 +34,9 @@ jobs:
     description: Build and push image to Google Container Registry
     machine: true
     steps:
-      - gcr/build-and-push-image:
+      - gcp-gcr/build-and-push-image:
           context: gcloud
+          path: my-webapp
           image: spike-circleci/my-webapp
           registry-url: gcr.io
 
