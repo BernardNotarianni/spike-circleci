@@ -45,6 +45,38 @@ jobs:
             docker build --rm=false -t gcr.io/spike-concourse/my-webapp:$CIRCLE_SHA1 .
             gcloud docker -- push gcr.io/spike-concourse/my-webapp:$CIRCLE_SHA1          
 
+  deploy-kubernetes:
+    docker:
+      - image: google/cloud-sdk
+    environment:
+      - GOOGLE_PROJECT_ID: "spike-concourse"
+      - GOOGLE_COMPUTE_ZONE: "europe-west1-c"
+      - GOOGLE_CLUSTER_NAME: "concourse"
+
+    steps:
+      - checkout
+
+      - run:
+          name: deploy to kubernetes
+          command: |
+            apt-get install -qq -y gettext
+            cd kubernetes
+
+            echo ${GCLOUD_SERVICE_KEY} > gcp-key.json
+            gcloud auth activate-service-account --key-file gcp-key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
+
+            export TAG=${CIRCLE_SHA1}
+            export NAMESPACE=my-webapp
+            envsubst < k8s_template.yml > patched_k8s.yml
+
+            kubectl apply -f patched_k8s.yml
+            kubectl rollout status deployment/my-webapp -n ${NAMESPACE}
+
+      - store_artifacts:
+          path: kubernetes/patched_k8s.yml
 
 workflows:
   version: 2
@@ -55,6 +87,10 @@ workflows:
           context: gcloud
           requires:
             - pytest
+      - deploy-kubernetes:
+          context: gcloud
+          requires:
+            - build-push-docker
 
           
 

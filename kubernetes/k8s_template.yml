@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${NAMESPACE}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ${NAMESPACE}
+  name: my-webapp
+  labels:
+    app: my-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-webapp
+  template:
+    metadata:
+      namespace: ${NAMESPACE}
+      labels:
+        app: my-webapp
+    spec:
+      containers:
+        - name: my-webapp
+          image: gcr.io/spike-concourse/my-webapp:${TAG}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ${NAMESPACE}
+  name: my-webapp
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 8000
+  selector:
+    app: my-webapp
