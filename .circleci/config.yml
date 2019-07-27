@@ -83,7 +83,6 @@ workflows:
             - pytest
       - deploy-kubernetes:
           context: gcloud
-          context: gcloud
           requires:
             - build-push-docker
 
