@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  test:
+  pytest:
     docker:
       - image: python:3.6
 
@@ -59,7 +59,9 @@ workflows:
   version: 2
   test_and_build:
     jobs:
-      - test
-      - build
+      - pytest
+      - build-docker:
+          requires:
+            test
 
           
