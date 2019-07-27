@@ -62,6 +62,6 @@ workflows:
       - pytest
       - build-docker:
           requires:
-            test
+            - test
 
           
