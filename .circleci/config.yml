@@ -60,19 +60,23 @@ jobs:
           name: deploy to kubernetes
           command: |
             apt-get install -qq -y gettext
+            cd kubernetes
 
-            echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcp-key.json
-            gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
+            echo ${GCLOUD_SERVICE_KEY} > gcp-key.json
+            gcloud auth activate-service-account --key-file gcp-key.json
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
 
             export TAG=${COMMIT_SHA1}
-            export NAMESPACE="my-webapp"
-            envsubst < ${HOME}/project/kubernetes/k8s_template.yml > ${HOME}/patched_k8s.yml
+            export NAMESPACE=my-webapp
+            envsubst < k8s_template.yml > patched_k8s.yml
 
-            kubectl apply -f ${HOME}/patched_k8s.yml
+            kubectl apply -f patched_k8s.yml
             kubectl rollout status deployment/my-webapp
+
+      - store_artifacts:
+          path: kubernetes/patched_k8s.yml
 
 workflows:
   version: 2
