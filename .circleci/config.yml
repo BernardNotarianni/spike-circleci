@@ -125,10 +125,11 @@ workflows:
           context: gcloud
           requires:
             - build-push-docker
+          
+  deploy-tags:
+    jobs:
       - deploy-tag-kubernetes:
           context: gcloud
-          requires:
-            - build-push-docker
           filters:
             tags:
               # run on all tags
