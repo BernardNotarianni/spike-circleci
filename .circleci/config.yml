@@ -69,7 +69,7 @@ jobs:
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
 
             export TAG=${CIRCLE_SHA1}
-            export NAMESPACE=$(echo $CIRCLE_BRANCH | sed 's/\([0-9]\).*/issue-\1/')
+            export NAMESPACE=$(echo $CIRCLE_BRANCH | sed 's/\([0-9][0-9]*\).*/issue-\1/')
             envsubst < k8s_template.yml > patched_k8s.yml
 
             kubectl apply -f patched_k8s.yml

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    </head>
+    <body>
+        <section class="section">
+            <div class="container">
+                <h1 class="title">
+                    Application Dashboard
+                </h1>
+                <p class="subtitle">
+                    Easy access to <strong>Kubernetes</strong> deployments.
+                </p>
+                <div class="box">
+                    <table class="table">
+                        <thead>
+                            <th>Name</th><th>Url</th>
+                        </thead>
+                        <tbody>
+                            % for i in items:
+                            <tr>
+                                % if i['issue_url']:
+                                <td><a href="{{ i['issue_url'] }}">{{ i['name'] }}</a></td>
+                                % else:
+                                <td>{{ i['name'] }}</td>
+                                % end
+                                <td><a href="{{ i['url'] }}">{{ i['url'] }}</a></td>
+                            </tr>
+                            % end
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <div class="container">
+                <h3 class="title">
+                    Google console
+                </h3>
+                <ul>
+                    <li><a href="https://console.cloud.google.com/home/dashboard?hl=fr&project=spike-concourse">Project console</a></li>
+                    <li><a href="https://console.cloud.google.com/kubernetes/workload?hl=fr&project=spike-concourse">Kubernetes Pods</a></li>
+                    <li><a href="https://console.cloud.google.com/kubernetes/discovery?hl=fr&project=spike-concourse&service_list_tablesize=50">Kubernetes Services</a></li>
+                </ul>
+            </div>
+        </section>
+    </body>
+</html>
